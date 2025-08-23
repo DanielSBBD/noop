@@ -21,7 +21,7 @@ agents:
     bedrock_agentcore:
       agent_id: reporting-r7Ph58CwkW
       agent_arn: arn:aws:bedrock-agentcore:us-east-1:129463259399:runtime/reporting-r7Ph58CwkW
-      agent_session_id: 4d4a5869-fda1-4bf0-8349-a3a74b401681
+      agent_session_id: 3ad3d67f-ed1d-4d51-9200-1ee0843f0679
     codebuild:
       project_name: bedrock-agentcore-reporting-builder
       execution_role: arn:aws:iam::129463259399:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-637d7becb9
