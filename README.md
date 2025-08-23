@@ -1,6 +1,22 @@
 # noop
 Take MServ's jobs
 
+# Setup
+
+## Agentcore CLI
+- Create a virtual environment: `python -m venv .venv`
+- Activate it: `source .venv/bin/activate`
+- Install the agentcore CLI: `pip install bedrock-agentcore-starter-toolkit`
+
+## Creating an Agent
+- Create a new folder in the agents directory
+- Create an agent.py file for your strands agent
+- Create a requirements.txt file for the dependencies it needs
+- cd into the agent's directory
+- Configure agentcore: `agentcore configure --entrypoint agent.py --name <agent_name>`
+- Launch agent: `agentcore launch`
+- Invoke agent: `agentcore invoke '{"prompt": "Hello"}'`
+
 # Goals
 
 ### <u>Infrastructure Discovery Agent</u>
