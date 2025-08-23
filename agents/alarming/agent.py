@@ -227,8 +227,8 @@ bedrock_model = BedrockModel(
     region_name="us-east-1"
 )
 
-# MSP Support Agent Instructions
-msp_agent_instructions = """
+# Agent Instructions
+agent_instructions = """
 You are an AWS CloudWatch alarm monitoring expert. Your task is to design and create CloudWatch alarms for infrastructure resources described in the prompt using the put_metric_alarm tool.
 
 **Core Principles**
@@ -269,7 +269,7 @@ You have been provided with a set of tools to answer the user's question. You wi
 app = BedrockAgentCoreApp()
 agent = Agent(
     model=bedrock_model, 
-    system_prompt=msp_agent_instructions,
+    system_prompt=agent_instructions,
     tools=[
         put_metric_alarm,
         invoke_aws_api,

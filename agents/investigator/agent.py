@@ -183,8 +183,8 @@ bedrock_model = BedrockModel(
     region_name="us-east-1"
 )
 
-# MSP Support Agent Instructions
-msp_agent_instructions = """
+# Agent Instructions
+agent_instructions = """
 You are an expert AWS support engineer. Your task is to investigate alerts, determine root causes, assess severity, and provide clear remediation steps.
 
 **Core Principles**
@@ -224,7 +224,7 @@ You have been provided with a set of tools to answer the user's question. You wi
 app = BedrockAgentCoreApp()
 agent = Agent(
     model=bedrock_model, 
-    system_prompt=msp_agent_instructions,
+    system_prompt=agent_instructions,
     tools=[
         invoke_aws_api,
         list_available_services, 
