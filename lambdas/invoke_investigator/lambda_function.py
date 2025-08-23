@@ -33,7 +33,9 @@ Metric: {namespace}/{metric_name}
 Dimensions: {json.dumps(dimensions, indent=2)}
     """.strip()
 
-    bedrock_client = boto3.client('bedrock-agentcore', region_name='us-east-1')
+    from botocore.config import Config
+    config = Config(read_timeout=900)  # 15 minutes
+    bedrock_client = boto3.client('bedrock-agentcore', region_name='us-east-1', config=config)
     sns_client = boto3.client('sns', region_name='us-east-1')
     
     try:
