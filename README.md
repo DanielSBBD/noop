@@ -6,6 +6,8 @@ Take MServ's jobs
 ### <u>Infrastructure Discovery Agent</u>
 
 - [MVP] Create a summary of the infrastructure in an account that can be referenced by other agents
+- [Stretch] Have an automatic trigger to run this when first deployed
+- [Stretch] Invoke this agent on a schedule
 
 ### <u>Alert Agent</u>
 
