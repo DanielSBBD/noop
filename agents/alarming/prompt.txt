@@ -1,82 +1,85 @@
-# AWS Account Resource Discovery Summary
- 
-## **Account Information**
-- **Account ID**: 129463259399
-- **Region**: us-east-1 (N. Virginia)
-- **Identity**:
-arn:aws:sts::129463259399:assumed-role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-fa44132b23/BedrockAgentCore-397b2487-53ef-4a0b-8434-d43c4b049915
- 
-## **Discovered Resources Essential for Monitoring**
- 
-### **EC2 Instances**:
-- **Test-Instance (i-09aae318a2af93c1f)**:
-  - **State**: running
-  - **Instance Type**: t2.nano
-  - **Launch Time**: 2025-08-23T11:10:26+00:00
-  - **Availability Zone**: us-east-1d
-  - **Private IP**: 172.31.22.31
-  - **VPC ID**: vpc-0da7eb8c7e3805467
-  - **Subnet ID**: subnet-08bf9119dda481606
-  - **Security Group**: sg-05ff31e7faded6626
-(default)
-  - **Monitoring**: disabled
-  - **Root Device Type**: ebs
-  -'",
-    "b' **Platform**: Linux/UNIX
-  - **Architecture**: x86_64
-  - **EBS Optimized**: false
- 
-### **EBS Volumes**:
-- **vol-010bbd0e839c180c4**:
-  - **Size**: 8 GB
-  - **Volume Type**:
-gp3
-  - **IOPS**: 3000
-  - **Throughput**: 125 MB/s
-  - **State**: in-use
-  - **Availability Zone**: us-east-1d
-  - **Attached To**: i-09aae318a2af93c1f (/dev/xvda)
-  - **Encrypted**:
-false
-  - **Delete on Termination**: true
- 
-### **VPC Network Infrastructure**:
-- **VPC (vpc-0da7eb8c7e3805467)**:
-  - **CIDR Block**: 172.31.0.0/16
-  - **State**: available
-  - **Is
-Default**: true
-  - **Instance Tenancy**: default
- 
-- **Subnet (subnet-08bf9119dda481606)**:
-  - **CIDR Block**: 172.31.16.0/20
-  - **Availability Zone**: us-east-1d
-  - **Available IP
-Addresses**: 4090
-  - **Map Public IP on Launch**: true
-  - **Default for AZ**: true
- 
-- **Security Group (sg-05ff31e7faded6626)**:
-  - **Name**: default
-  - **Description**: default VPC
-security group
-  - **Inbound Rules**: All traffic from same security group
-  - **Outbound Rules**: All traffic to 0.0.0.0/0
- 
-### **S3 Buckets**:
-- **bedrock-agentcore-codebuild-sources-129463259399-us-east-1**:
-  - **Creation Date**: 2025-08-23T09:41:33+00:00
-  - **Region**: us-east-1 (inferred from name and location constraint)
-  - **Versioning**: Not enabled
-  - **Purpose**: CodeBuild source storage (inferred from name)
- 
-### **Summary of Monitoring-Critical Resources**:
-- **1 EC2 Instance** (t2.nano) - Currently running without CloudWatch detailed monitoring
-- **1 EBS Volume** (8GB gp3) - Attached to the EC2 instance
-- **1 VPC** with
-**1 Subnet** in us-east-1d
-- **1 Security Group** with default configuration
-- **1 S3 Bucket** for CodeBuild sources
- 
-**Note**: Control Tower related resources (Lambda functions, SNS topics,
-CloudWatch log groups, and EventBridge rules) were excluded from this summary as they are managed infrastructure components and not part of the core workload requiring monitoring.
+AWS Account Resource Discovery Summary
+Account Information
+
+Account ID: 129463259399
+Region: us-east-1
+Identity: arn:aws:sts::129463259399:assumed-role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-fa44132b23/BedrockAgentCore-3b937cd4-e6f2-4956-b752-11f6fefc70ba
+Discovered Resources Essential for Monitoring
+
+EC2 Instances:
+
+ExtremelyImportantAppServer (i-071876f753442951d):
+State: running
+Instance Type: t3.micro
+Availability Zone: us-east-1a
+Public IP: 107.22.4.63
+Private IP: 172.31.45.186
+VPC ID: vpc-0da7eb8c7e3805467
+Subnet ID: subnet-07a0a8d01d1d67b39
+Security Group: sg-05ff31e7faded6626 (default)
+EBS Optimized: True
+Monitoring: disabled
+IAM Role: TestInstanceRole
+Launch Time: 2025-08-23T14:19:23+00:00
+Root Device: /dev/xvda (EBS)
+Test-Instance (i-09aae318a2af93c1f):
+State: terminated
+Instance Type: t2.nano
+Availability Zone: us-east-1d
+Monitoring: disabled
+Termination Time: 2025-08-23T14:14:06 GMT
+EBS Volumes:
+
+vol-090f075e17318955b:
+Size: 8 GB
+Volume Type: gp3
+IOPS: 3000
+Throughput: 125 MB/s
+State: in-use
+Attached to: i-071876f753442951d (/dev/xvda)
+Availability Zone: us-east-1a
+Encrypted: False
+Delete on Termination: True
+VPC Infrastructure:
+
+VPC (vpc-0da7eb8c7e3805467):
+CIDR Block: 172.31.0.0/16
+State: available
+Default VPC: True
+Tenancy: default
+Subnet (subnet-07a0a8d01d1d67b39):
+CIDR Block: 172.31.32.0/20
+Availability Zone: us-east-1a
+State: available
+Available IPs: 4090
+Public IP on Launch: True
+Default for AZ: True
+Security Groups:
+
+default (sg-05ff31e7faded6626):
+VPC ID: vpc-0da7eb8c7e3805467
+Inbound Rules: Allow all traffic from same security group
+Outbound Rules: Allow all traffic to 0.0.0.0/0
+S3 Buckets:
+
+noop-storage:
+Region: us-east-1 (default)
+Creation Date: 2025-08-23T14:09:48+00:00
+Versioning: Not enabled
+IAM Roles:
+
+TestInstanceRole:
+Role ARN: arn:aws:iam::129463259399:role/TestInstanceRole
+Service: ec2.amazonaws.com
+Attached Policies:
+CloudWatchAgentServerPolicy
+AmazonSSMManagedInstanceCore
+Creation Date: 2025-08-23T13:56:33+00:00
+Key Monitoring Recommendations:
+
+ExtremelyImportantAppServer is the primary workload resource requiring comprehensive monitoring
+EBS volume vol-090f075e17318955b should be monitored for performance and capacity
+S3 bucket noop-storage should be monitored for access patterns and costs
+The Test-Instance is terminated and doesn't require active monitoring
+Network traffic and security group changes should be monitored for the active instance
+CloudWatch monitoring is currently disabled on the running instance - consider enabling for better observability
