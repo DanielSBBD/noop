@@ -185,7 +185,6 @@ You are an expert AWS support engineer. Your task is to discover all the resourc
     - **<resource_name>**:
       - **<property_name>**: <property_value>
       - **<property_name>**: <property_value>
-      - ...
     - **<resource_name>**:
       - **<property_name>**: <property_value>
       - **<property_name>**: <property_value>
@@ -223,9 +222,24 @@ def invoke(payload):
         # Log the incoming request
         logging.info(f"Received request with prompt: {user_message[:200]}...")
         
-        # Process the message with the fresh agent
         response = agent(user_message)
-        return {"result": response.message}
+
+        # Store response in the s3 bucket
+        s3_client = boto3.client('s3')
+        
+        # Parse the response to extract the content
+        raw_response = str(response.message)
+        
+        markdown_response = raw_response[raw_response.find('"')+1:raw_response.rfind('"')]
+        
+        s3_client.put_object(
+            Bucket='noop-storage',
+            Key='discovery-results.md',
+            Body=markdown_response.encode('utf-8'),
+            ContentType='text/markdown'
+        )
+
+        return {"message": "Response stored in s3 bucket"}
         
     except Exception as e:
         error_msg = f"Error processing request: {str(e)}"
