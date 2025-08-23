@@ -81,7 +81,6 @@ def put_metric_alarm(
     try:
         # Parse JSON string parameters
         try:
-            alarm_actions_list = json.loads(alarm_actions)
             dimensions_list = json.loads(dimensions)
             insufficient_data_actions_list = json.loads(insufficient_data_actions)
             ok_actions_list = json.loads(ok_actions)
@@ -99,7 +98,6 @@ def put_metric_alarm(
             'Statistic': statistic,
             'Threshold': threshold,
             'ActionsEnabled': actions_enabled,
-            'AlarmActions': alarm_actions_list,
             'AlarmDescription': alarm_description,
             'Dimensions': dimensions_list,
             'InsufficientDataActions': insufficient_data_actions_list,
