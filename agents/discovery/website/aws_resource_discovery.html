@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Resource Discovery Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .account-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-item h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        .info-item .value {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #e9ecef;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 20px 30px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            padding: 30px;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .resource-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resource-title::before {
+            content: "🔧";
+            font-size: 1.2rem;
+        }
+
+        .resource-details {
+            list-style: none;
+        }
+
+        .resource-details li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resource-details li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: right;
+            max-width: 60%;
+            word-break: break-word;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-enabled {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-critical {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .monitoring-relevance {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .monitoring-relevance h4 {
+            color: #856404;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .monitoring-relevance p {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        .data-flow {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .data-flow h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .flow-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .flow-item h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .flow-steps {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .flow-arrow {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+        }
+
+        .not-found {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .not-found h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .not-found-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .not-found-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .recommendations h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .rec-section {
+            margin-bottom: 25px;
+        }
+
+        .rec-section h4 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .rec-list {
+            list-style: none;
+        }
+
+        .rec-list li {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .account-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-steps {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .icon {
+            font-size: 1.2rem;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AWS Resource Discovery Summary</h1>
+            <div class="subtitle">Comprehensive overview of AWS account resources and monitoring recommendations</div>
+        </div>
+
+        <div class="content">
+            <!-- Account Information -->
+            <div class="account-info">
+                <div class="info-item">
+                    <h3>Account ID</h3>
+                    <div class="value">129463259399</div>
+                </div>
+                <div class="info-item">
+                    <h3>Region</h3>
+                    <div class="value">us-east-1 (US East - N. Virginia)</div>
+                </div>
+                <div class="info-item">
+                    <h3>Identity</h3>
+                    <div class="value">Bedrock Agent Core SDK Runtime role</div>
+                </div>
+            </div>
+
+            <!-- Compute Resources -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="icon">🖥️</span>
+                    Compute Resources
+                </div>
+                <div class="section-content">
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <div class="resource-title">Lambda Functions</div>
+                            <ul class="resource-details">
+                                <li>
+                                    <span class="detail-label">Function Name</span>
+                                    <span class="detail-value">aws-controltower-NotificationForwarder</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Runtime</span>
+                                    <span class="detail-value">Python 3.13</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Memory</span>
+                                    <span class="detail-value">128 MB</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Timeout</span>
+                                    <span class="detail-value">60 seconds</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Role</span>
+                                    <span class="detail-value">arn:aws:iam::129463259399:role/aws-controltower-ForwardSnsNotificationRole</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Log Group</span>
+                                    <span class="detail-value">/aws/lambda/aws-controltower-NotificationForwarder</span>
+                                </li>
+                            </ul>
+                            <div class="monitoring-relevance">
+                                <h4>Monitoring Relevance</h4>
+                                <p>Critical for Control Tower security notification routing</p>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-title">CodeBuild Projects</div>
+                            <ul class="resource-details">
+                                <li>
+                                    <span class="detail-label">Total Projects</span>
+                                    <span class="detail-value">3</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Projects</span>
+                                    <span class="detail-value">
+                                        bedrock-agentcore-discovery-builder<br>
+                                        bedrock-agentcore-alarming-builder<br>
+                                        bedrock-agentcore-investigator-builder
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Log Groups</span>
+                                    <span class="detail-value">Each has dedicated CloudWatch log groups</span>
+                                </li>
+                            </ul>
+                            <div class="monitoring-relevance">
+                                <h4>Monitoring Relevance</h4>
+                                <p>Build pipeline monitoring for Bedrock agents</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messaging & Event Processing -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="icon">📡</span>
+                    Messaging & Event Processing
+                </div>
+                <div class="section-content">
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <div class="resource-title">SNS Topics</div>
+                            <ul class="resource-details">
+                                <li>
+                                    <span class="detail-label">Topic</span>
+                                    <span class="detail-value">aws-controltower-SecurityNotifications</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">ARN</span>
+                                    <span class="detail-value">arn:aws:sns:us-east-1:129463259399:aws-controltower-SecurityNotifications</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Subscriptions</span>
+                                    <span class="detail-value">1 Lambda subscription (NotificationForwarder)</span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Policy</span>
+                                    <span class="detail-value">Allows EventBridge to publish events</span>
+                                </li>
+                            </ul>
+                            <div class="monitoring-relevance">
+                                <h4>Monitoring Relevance</h4>
+                                <p>Central hub for security notifications</p>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-title">EventBridge Rules</div>
+                            <ul class="resource-details">
+                                <li>
+                                    <span class="detail-label">AWSControlTowerManagedRule</span>
+                                    <span class="detail-value">
+                                        <span class="status-badge status-enabled">Enabled</span><br>
+                                        Security Hub findings for Control Tower standards
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="detail-label">Config Compliance Rule</span>
+                                    <span class="detail-value">
+                                        <span class="status-badge status-enabled">Enabled</span><br>
+                                        AWS Config rule compliance changes
+                                    </span>
+                                </li>
+                            </ul>
+                            <div class="monitoring-relevance">
+                                <h4>Monitoring Relevance</h4>
+                                <p>Security compliance and configuration monitoring</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logging Infrastructure -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="icon">📊</span>
+                    Logging Infrastructure
+                </div>
+                <div class="section-content">
+                    <div class="resource-card">
+                        <div class="resource-title">CloudWatch Log Groups (7 total)</div>
+                        <ul class="resource-details">
+                            <li>
+                                <span class="detail-label">Lambda Logs</span>
+                                <span class="detail-value">/aws/lambda/aws-controltower-NotificationForwarder (14-day retention)</span>
+                            </li>
+                            <li>
+                                <span class="detail-label">Bedrock Runtime Logs</span>
+                                <span class="detail-value">
+                                    /aws/bedrock-agentcore/runtimes/alarming-qq33p96PFS-DEFAULT<br>
+                                    /aws/bedrock-agentcore/runtimes/discovery-TbhTOu3vU7-DEFAULT<br>
+                                    /aws/bedrock-agentcore/runtimes/investigator-JB4TCCB1ao-DEFAULT
+                                </span>
+                            </li>
+                            <li>
+                                <span class="detail-label">CodeBuild Logs</span>
+                                <span class="detail-value">
+                                    /aws/codebuild/bedrock-agentcore-alarming-builder<br>
+                                    /aws/codebuild/bedrock-agentcore-discovery-builder<br>
+                                    /aws/codebuild/bedrock-agentcore-investigator-builder
+                                </span>
+                            </li>
+                        </ul>
+                        <div class="monitoring-relevance">
+                            <h4>Monitoring Relevance</h4>
+                            <p>Central logging for all application components</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI/ML Resources -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="icon">🤖</span>
+                    AI/ML Resources
+                </div>
+                <div class="section-content">
+                    <div class="resource-card">
+                        <div class="resource-title">Bedrock Foundation Models</div>
+                        <ul class="resource-details">
+                            <li>
+                                <span class="detail-label">Available Models</span>
+                                <span class="detail-value">87 total models</span>
+                            </li>
+                            <li>
+                                <span class="detail-label">Model Series</span>
+                                <span class="detail-value">
+                                    Amazon Nova series (Premier, Pro, Lite, Micro, Canvas, Reel, Sonic)<br>
+                                    Amazon Titan series (Text, Image, Embeddings)<br>
+                                    Anthropic Claude series (including Claude 4 Opus and Sonnet)<br>
+                                    Meta Llama series<br>
+                                    Mistral AI models<br>
+                                    Cohere models<br>
+                                    And others from various providers
+                                </span>
+                            </li>
+                        </ul>
+                        <div class="monitoring-relevance">
+                            <h4>Monitoring Relevance</h4>
+                            <p>Model usage tracking, cost monitoring, and performance metrics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow -->
+            <div class="data-flow">
+                <h3>🔄 Key Resource Dependencies & Data Flow</h3>
+                <div class="flow-item">
+                    <h4>Security Monitoring Pipeline</h4>
+                    <div class="flow-steps">
+                        <span class="flow-step">Security Hub</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">EventBridge Rule</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">SNS Topic</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">Lambda Function</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">External SNS Topic</span>
+                    </div>
+                </div>
+                <div class="flow-item">
+                    <h4>Config Compliance Pipeline</h4>
+                    <div class="flow-steps">
+                        <span class="flow-step">AWS Config</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">EventBridge Rule</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">SNS Topic</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">Lambda Function</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">External SNS Topic</span>
+                    </div>
+                </div>
+                <div class="flow-item">
+                    <h4>Bedrock Agent Pipeline</h4>
+                    <div class="flow-steps">
+                        <span class="flow-step">Bedrock Agents</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">CloudWatch Logs</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-step">CodeBuild Projects</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources NOT Found -->
+            <div class="not-found">
+                <h3>❌ Resources NOT Found (Empty Services)</h3>
+                <div class="not-found-list">
+                    <div class="not-found-item">EC2 Instances</div>
+                    <div class="not-found-item">RDS Databases</div>
+                    <div class="not-found-item">DynamoDB Tables</div>
+                    <div class="not-found-item">SQS Queues</div>
+                    <div class="not-found-item">Auto Scaling Groups</div>
+                    <div class="not-found-item">Load Balancers (ELB/ALB)</div>
+                    <div class="not-found-item">ECS Clusters</div>
+                    <div class="not-found-item">S3 Buckets (access restricted)</div>
+                    <div class="not-found-item">Bedrock Agents (none deployed)</div>
+                </div>
+            </div>
+
+            <!-- Monitoring Recommendations -->
+            <div class="recommendations">
+                <h3>📋 Monitoring Recommendations</h3>
+                
+                <div class="rec-section">
+                    <h4>Critical Metrics to Monitor</h4>
+                    <ul class="rec-list">
+                        <li>Lambda function invocations, errors, and duration</li>
+                        <li>SNS message delivery success/failure rates</li>
+                        <li>CodeBuild project success/failure rates</li>
+                        <li>CloudWatch Log errors and patterns</li>
+                        <li>Bedrock model usage and costs</li>
+                    </ul>
+                </div>
+
+                <div class="rec-section">
+                    <h4>Alerting Priorities</h4>
+                    <ul class="rec-list">
+                        <li>Lambda function failures (security notification disruption)</li>
+                        <li>EventBridge rule failures</li>
+                        <li>SNS delivery failures</li>
+                        <li>CodeBuild project failures</li>
+                    </ul>
+                </div>
+
+                <div class="rec-section">
+                    <h4>Cost Monitoring</h4>
+                    <ul class="rec-list">
+                        <li>Bedrock model usage costs</li>
+                        <li>Lambda execution costs</li>
+                        <li>CloudWatch Logs storage costs</li>
+                    </ul>
+                </div>
+
+                <div class="rec-section">
+                    <h4>Account Summary</h4>
+                    <p style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; font-size: 0.9rem;">
+                        This account appears to be primarily set up for AWS Control Tower governance with Bedrock AI/ML capabilities, 
+                        focusing on security monitoring and compliance tracking rather than traditional application workloads.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
