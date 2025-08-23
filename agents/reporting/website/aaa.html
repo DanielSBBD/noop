@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Account Resource Summary</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            line-height: 
+1.6;
+        }
+        .header { 
+            background-color: #232f3e; 
+            color: white; 
+            padding: 20px; 
+            border-radius: 5px; 
+            margin-bottom: 20px;
+    
+}
+        .resource-section { 
+            background-color: #f8f9fa; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            border-radius: 5px; 
+            border-left: 4px solid 
+#ff9900;
+        }
+        .critical { 
+            background-color: #fff3cd; 
+            border-left-color: #dc3545; 
+            padding: 10px; 
+            border-radius: 3px;
+        }
+        
+.resource-item { 
+            margin-bottom: 10px; 
+            padding: 10px; 
+            background-color: white; 
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+      
+.resource-title { 
+            font-weight: bold; 
+            color: #232f3e; 
+            margin-bottom: 5px;
+        }
+        .detail { 
+            margin-left: 10px; 
+            font-size: 0.9em; 
+
+            color: #666;
+        }
+        .status-running { color: #28a745; }
+        .status-warning { color: #ffc107; }
+        .status-info { color: #17a2b8; }
+    </style>
+</head>
+<body>
+  
+<div class="header">
+        <h1> AWS Account Resource Discovery Summary</h1>
+        <p><strong>Account ID:</strong> 129463259399 | <strong>Region:</strong> us-east-1</p>
+  
+</div>
+
+    <div class="critical">
+        <h3> Critical Notice</h3>
+        <p>Your account contains an active EC2 instance named 
+"<strong>ExtremelyImportantAppServer</strong>" that requires immediate monitoring attention.</p>
+    </div>
+
+    <div class="resource-section">
+        <h2> EC2 Instances (1)</h2>
+        <div class="resource-item">
+           
+<div class="resource-title">ExtremelyImportantAppServer (i-071876f753442951d)</div>
+            <div class="detail"><span class="status-running"> Running</span> | Instance Type: 
+t3.micro | Platform: Linux/UNIX</div>
+            <div class="detail"> Public IP: 107.22.4.63 | Private IP: 172.31.45.186</div>
+            <div 
+class="detail"> Launched: August 23, 2025 at 14:19:23 UTC</div>
+            <div class="detail"> <span class="status-warning">Monitoring: 
+DISABLED</span></div>
+            <div class="detail"> IAM Role: TestInstanceRole</div>
+            <div class="detail"> Availability Zone: us-east-1a</div>
+  
+</div>
+    </div>
+
+    <div class="resource-section">
+        <h2> EBS Volumes (1)</h2>
+        <div class="resource-item">
+            <div class="resource-title">vol-090f075e17318955b</div>
+            <div class="detail"> Size: 8 GB | Type: gp3 | IOPS: 3,000 | Throughput: 125 MiB/s</div>
+            <div 
+class="detail"><span class="status-running"> In-use</span> | Attached to: ExtremelyImportantAppServer (/dev/xvda)</div>
+            <div class="detail"> <span 
+class="status-warning">Encryption: DISABLED</span></div>
+        </div>
+    </div>
+
+    <div class="resource-section">
+        <h2> S3 Buckets (1)</h2>
+        <div 
+class="resource-item">
+            <div class="resource-title">noop-storage</div>
+            <div class="detail"> Created: August 23, 2025 at 14:09:48 
+UTC</div>
+            <div class="detail"> Region: us-east-1</div>
+            <div class="detail"> <span class="status-warning">Versioning: NOT 
+ENABLED</span></div>
+        </div>
+    </div>
+
+    <div class="resource-section">
+        <h2> Networking</h2>
+        <div class="resource-item">
+            
+<div class="resource-title">VPC: vpc-0da7eb8c7e3805467 (Default VPC)</div>
+            <div class="detail"> CIDR Block: 172.31.0.0/16</div>
+            <div 
+class="detail"> DNS Hostnames & Resolution: Enabled</div>
+        </div>
+        <div class="resource-item">
+            <div class="resource-title">Subnet: 
+subnet-07a0a8d01d1d67b39</div>
+            <div class="detail"> CIDR Block: 172.31.32.0/20 | Available IPs: 4,090</div>
+            <div class="detail"> 
+Availability Zone: us-east-1a</div>
+            <div class="detail"> Auto-assign Public IP: Enabled</div>
+        </div>
+    </div>
+
+    <div 
+class="resource-section">
+        <h2> Security & Access</h2>
+        <div class="resource-item">
+            <div class="resource-title">Security Group: 
+sg-05ff31e7faded6626 (default)</div>
+            <div class="detail"> Inbound: Allow all traffic from same security group</div>
+            <div class="detail"> 
+Outbound: Allow all traffic to 0.0.0.0/0</div>
+        </div>
+        <div class="resource-item">
+            <div class="resource-title">IAM Role: TestInstanceRole</div>
+            <div 
+class="detail"> Created: August 23, 2025 at 13:56:33 UTC</div>
+            <div class="detail"> Policies: CloudWatchAgentServerPolicy, 
+AmazonSSMManagedInstanceCore</div>
+            <div class="detail"> Trust: EC2 service</div>
+        </div>
+    </div>
+
+    <div class="resource-section">
+        
+<h2> Summary & Recommendations</h2>
+        <ul>
+            <li><strong>Active Resources:</strong> 1 EC2 instance, 1 EBS volume, 1 S3 bucket</li>
+            <li><strong>Infrastructure 
+Setup:</strong> Standard default VPC configuration</li>
+            <li><strong>Monitoring Ready:</strong> Instance has CloudWatch and SSM permissions</li>
+            <li class="status-warning"><strong>Action 
+Required:</strong> Enable detailed monitoring for the EC2 instance</li>
+            <li class="status-warning"><strong>Security Note:</strong> Consider enabling EBS encryption and S3 versioning</li>
+        </ul>
+    </div>
+</body>
+</html>
