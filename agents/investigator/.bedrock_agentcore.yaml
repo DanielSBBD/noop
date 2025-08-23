@@ -3,7 +3,7 @@ agents:
   investigator:
     name: investigator
     entrypoint: agent.py
-    platform: linux/arm64
+    platform: linux/amd64
     container_runtime: docker
     aws:
       execution_role: null
@@ -21,10 +21,11 @@ agents:
     bedrock_agentcore:
       agent_id: null
       agent_arn: null
-      agent_session_id: null
+      agent_session_id: b9af8c32-7342-4cc1-86b9-4714618adf0d
     codebuild:
       project_name: null
       execution_role: null
       source_bucket: null
     authorizer_configuration: null
-    oauth_configuration: null
+    oauth_configuration:
+      workload_name: workload-82871e6f
