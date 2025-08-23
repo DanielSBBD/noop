@@ -17,6 +17,10 @@ Take MServ's jobs
 - Launch agent: `agentcore launch`
 - Invoke agent: `agentcore invoke '{"prompt": "Hello"}'`
 
+## Agent testing
+- Once deployed, create a prompt.txt in the agent's folder
+- Run `agentcore invoke "$(jq -n --rawfile prompt prompt.txt '{prompt: $prompt}')"`
+
 # Goals
 
 ### <u>Infrastructure Discovery Agent</u>

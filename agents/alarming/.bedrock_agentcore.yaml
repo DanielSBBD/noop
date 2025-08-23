@@ -21,7 +21,7 @@ agents:
     bedrock_agentcore:
       agent_id: alarming-qq33p96PFS
       agent_arn: arn:aws:bedrock-agentcore:us-east-1:129463259399:runtime/alarming-qq33p96PFS
-      agent_session_id: 8e6e2b4b-490d-4162-aa88-e2a98ffbd3b7
+      agent_session_id: null
     codebuild:
       project_name: bedrock-agentcore-alarming-builder
       execution_role: arn:aws:iam::129463259399:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-911561122e

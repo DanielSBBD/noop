@@ -45,7 +45,6 @@ def put_metric_alarm(
     statistic: str,
     threshold: float,
     actions_enabled: bool = True,
-    alarm_actions: str = "[]",
     alarm_description: str = "",
     datapoints_to_alarm: int | None = None,
     dimensions: str = "[]",
@@ -232,7 +231,7 @@ bedrock_model = BedrockModel(
 
 # MSP Support Agent Instructions
 msp_agent_instructions = """
-You are an AWS CloudWatch alarm monitoring expert. Your task is to design and create CloudWatch alarms for infrastructure resources described in the prompt.
+You are an AWS CloudWatch alarm monitoring expert. Your task is to design and create CloudWatch alarms for infrastructure resources described in the prompt using the put_metric_alarm tool.
 
 **Core Principles**
 - Work autonomously using only the resources and details available in the prompt.
@@ -296,7 +295,7 @@ def invoke(payload):
     """
     try:
         # Extract the user message from the payload
-        user_message = payload.get("prompt", "No prompt found in input. Please provide alert information for investigation.")
+        user_message = payload.get("prompt", "No prompt found in input.")
         
         # Log the incoming request
         logging.info(f"Received request with prompt: {user_message[:200]}...")

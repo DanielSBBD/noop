@@ -1,0 +1,43 @@
+Create comprehensive CloudWatch alarms for the following AWS infrastructure in account 129463259399, region us-east-1:
+
+**Lambda Functions:**
+- aws-controltower-NotificationForwarder (Python 3.13, 128MB, 60s timeout)
+  - Log Group: /aws/lambda/aws-controltower-NotificationForwarder
+  - Critical for Control Tower security notifications
+
+**CodeBuild Projects:**
+- bedrock-agentcore-discovery-builder
+- bedrock-agentcore-alarming-builder
+- bedrock-agentcore-investigator-builder
+  - Each has dedicated CloudWatch log groups
+
+**SNS Topics:**
+- aws-controltower-SecurityNotifications (arn:aws:sns:us-east-1:129463259399:aws-controltower-SecurityNotifications)
+  - 1 Lambda subscription
+  - Central hub for security notifications
+
+**EventBridge Rules:**
+- AWSControlTowerManagedRule (Security Hub findings)
+- aws-controltower-ConfigComplianceChangeEventRule (Config compliance changes)
+
+**CloudWatch Log Groups (7 total):**
+- /aws/lambda/aws-controltower-NotificationForwarder (14-day retention)
+- /aws/bedrock-agentcore/runtimes/alarming-qq33p96PFS-DEFAULT
+- /aws/bedrock-agentcore/runtimes/discovery-TbhTOu3vU7-DEFAULT
+- /aws/bedrock-agentcore/runtimes/investigator-JB4TCCB1ao-DEFAULT
+- /aws/codebuild/bedrock-agentcore-alarming-builder
+- /aws/codebuild/bedrock-agentcore-discovery-builder
+- /aws/codebuild/bedrock-agentcore-investigator-builder
+
+**Bedrock Foundation Models:**
+- 87 available models including Amazon Nova, Titan, Anthropic Claude, Meta Llama, Mistral AI, Cohere
+
+**Priority Requirements:**
+1. Lambda function failures (critical for security notifications)
+2. SNS delivery failures
+3. CodeBuild project failures
+4. EventBridge rule failures
+5. High error rates in CloudWatch Logs
+6. Bedrock model usage and cost monitoring
+
+Create alarms with appropriate thresholds for this Control Tower governance setup with Bedrock AI/ML capabilities.
