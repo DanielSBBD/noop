@@ -51,6 +51,8 @@ htmlcov/
 docs/
 *.md
 !README.md
+prompt.txt
+delete_alarms.sh
 
 # CI/CD
 .github/
