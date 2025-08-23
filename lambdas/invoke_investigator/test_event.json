@@ -1,0 +1,40 @@
+{
+  "source": "aws.cloudwatch",
+  "alarmArn": "arn:aws:cloudwatch:us-east-1:129463259399:alarm:TestAlarm-HighCPU",
+  "accountId": "129463259399",
+  "time": "2025-08-23T15:11:05.983+0000",
+  "region": "us-east-1",
+  "alarmData": {
+    "alarmName": "TestAlarm-HighCPU",
+    "state": {
+      "value": "ALARM",
+      "reason": "Threshold Crossed: 2 out of the last 2 datapoints [100.0 (23/08/25 15:06:00), 99.93628976473903 (23/08/25 15:01:00)] were greater than the threshold (80.0).",
+      "timestamp": "2025-08-23T15:11:05.983+0000"
+    },
+    "previousState": {
+      "value": "OK",
+      "reason": "Threshold Crossed: 2 out of the last 2 datapoints [0.1998883579181825 (23/08/25 14:58:00), 0.14998943081153376 (23/08/25 14:53:00)] were not greater than the threshold (80.0).",
+      "timestamp": "2025-08-23T15:03:05.980+0000"
+    },
+    "configuration": {
+      "description": "High CPU utilization on test server - investigate workload",
+      "metrics": [
+        {
+          "id": "test-metric-id",
+          "metricStat": {
+            "metric": {
+              "namespace": "AWS/EC2",
+              "name": "CPUUtilization",
+              "dimensions": {
+                "InstanceId": "i-1234567890abcdef0"
+              }
+            },
+            "period": 300,
+            "stat": "Average"
+          },
+          "returnData": true
+        }
+      ]
+    }
+  }
+}
