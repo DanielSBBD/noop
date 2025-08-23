@@ -1,43 +1,82 @@
-Create comprehensive CloudWatch alarms for the following AWS infrastructure in account 129463259399, region us-east-1:
-
-**Lambda Functions:**
-- aws-controltower-NotificationForwarder (Python 3.13, 128MB, 60s timeout)
-  - Log Group: /aws/lambda/aws-controltower-NotificationForwarder
-  - Critical for Control Tower security notifications
-
-**CodeBuild Projects:**
-- bedrock-agentcore-discovery-builder
-- bedrock-agentcore-alarming-builder
-- bedrock-agentcore-investigator-builder
-  - Each has dedicated CloudWatch log groups
-
-**SNS Topics:**
-- aws-controltower-SecurityNotifications (arn:aws:sns:us-east-1:129463259399:aws-controltower-SecurityNotifications)
-  - 1 Lambda subscription
-  - Central hub for security notifications
-
-**EventBridge Rules:**
-- AWSControlTowerManagedRule (Security Hub findings)
-- aws-controltower-ConfigComplianceChangeEventRule (Config compliance changes)
-
-**CloudWatch Log Groups (7 total):**
-- /aws/lambda/aws-controltower-NotificationForwarder (14-day retention)
-- /aws/bedrock-agentcore/runtimes/alarming-qq33p96PFS-DEFAULT
-- /aws/bedrock-agentcore/runtimes/discovery-TbhTOu3vU7-DEFAULT
-- /aws/bedrock-agentcore/runtimes/investigator-JB4TCCB1ao-DEFAULT
-- /aws/codebuild/bedrock-agentcore-alarming-builder
-- /aws/codebuild/bedrock-agentcore-discovery-builder
-- /aws/codebuild/bedrock-agentcore-investigator-builder
-
-**Bedrock Foundation Models:**
-- 87 available models including Amazon Nova, Titan, Anthropic Claude, Meta Llama, Mistral AI, Cohere
-
-**Priority Requirements:**
-1. Lambda function failures (critical for security notifications)
-2. SNS delivery failures
-3. CodeBuild project failures
-4. EventBridge rule failures
-5. High error rates in CloudWatch Logs
-6. Bedrock model usage and cost monitoring
-
-Create alarms with appropriate thresholds for this Control Tower governance setup with Bedrock AI/ML capabilities.
+# AWS Account Resource Discovery Summary
+ 
+## **Account Information**
+- **Account ID**: 129463259399
+- **Region**: us-east-1 (N. Virginia)
+- **Identity**:
+arn:aws:sts::129463259399:assumed-role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-fa44132b23/BedrockAgentCore-397b2487-53ef-4a0b-8434-d43c4b049915
+ 
+## **Discovered Resources Essential for Monitoring**
+ 
+### **EC2 Instances**:
+- **Test-Instance (i-09aae318a2af93c1f)**:
+  - **State**: running
+  - **Instance Type**: t2.nano
+  - **Launch Time**: 2025-08-23T11:10:26+00:00
+  - **Availability Zone**: us-east-1d
+  - **Private IP**: 172.31.22.31
+  - **VPC ID**: vpc-0da7eb8c7e3805467
+  - **Subnet ID**: subnet-08bf9119dda481606
+  - **Security Group**: sg-05ff31e7faded6626
+(default)
+  - **Monitoring**: disabled
+  - **Root Device Type**: ebs
+  -'",
+    "b' **Platform**: Linux/UNIX
+  - **Architecture**: x86_64
+  - **EBS Optimized**: false
+ 
+### **EBS Volumes**:
+- **vol-010bbd0e839c180c4**:
+  - **Size**: 8 GB
+  - **Volume Type**:
+gp3
+  - **IOPS**: 3000
+  - **Throughput**: 125 MB/s
+  - **State**: in-use
+  - **Availability Zone**: us-east-1d
+  - **Attached To**: i-09aae318a2af93c1f (/dev/xvda)
+  - **Encrypted**:
+false
+  - **Delete on Termination**: true
+ 
+### **VPC Network Infrastructure**:
+- **VPC (vpc-0da7eb8c7e3805467)**:
+  - **CIDR Block**: 172.31.0.0/16
+  - **State**: available
+  - **Is
+Default**: true
+  - **Instance Tenancy**: default
+ 
+- **Subnet (subnet-08bf9119dda481606)**:
+  - **CIDR Block**: 172.31.16.0/20
+  - **Availability Zone**: us-east-1d
+  - **Available IP
+Addresses**: 4090
+  - **Map Public IP on Launch**: true
+  - **Default for AZ**: true
+ 
+- **Security Group (sg-05ff31e7faded6626)**:
+  - **Name**: default
+  - **Description**: default VPC
+security group
+  - **Inbound Rules**: All traffic from same security group
+  - **Outbound Rules**: All traffic to 0.0.0.0/0
+ 
+### **S3 Buckets**:
+- **bedrock-agentcore-codebuild-sources-129463259399-us-east-1**:
+  - **Creation Date**: 2025-08-23T09:41:33+00:00
+  - **Region**: us-east-1 (inferred from name and location constraint)
+  - **Versioning**: Not enabled
+  - **Purpose**: CodeBuild source storage (inferred from name)
+ 
+### **Summary of Monitoring-Critical Resources**:
+- **1 EC2 Instance** (t2.nano) - Currently running without CloudWatch detailed monitoring
+- **1 EBS Volume** (8GB gp3) - Attached to the EC2 instance
+- **1 VPC** with
+**1 Subnet** in us-east-1d
+- **1 Security Group** with default configuration
+- **1 S3 Bucket** for CodeBuild sources
+ 
+**Note**: Control Tower related resources (Lambda functions, SNS topics,
+CloudWatch log groups, and EventBridge rules) were excluded from this summary as they are managed infrastructure components and not part of the core workload requiring monitoring.

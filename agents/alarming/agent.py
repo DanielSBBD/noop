@@ -102,7 +102,10 @@ def put_metric_alarm(
             'Dimensions': dimensions_list,
             'InsufficientDataActions': insufficient_data_actions_list,
             'OKActions': ok_actions_list,
-            'TreatMissingData': treat_missing_data
+            'TreatMissingData': treat_missing_data,
+            'AlarmActions': [
+                'arn:aws:lambda:us-east-1:129463259399:function:invoke-investigator'
+            ],
         }
         
         # Add optional parameters if provided
