@@ -20,7 +20,7 @@ input = input[input.find("\\\"text\\\": \\\"")+12:]
 input = input.replace("\n", "")
 input = input.replace("\'\",    \"b\'", "")
 input = input.replace("\\\\\\\\n", "\n")
-input = input.replace("\\'", "'")
+input = input.replace("\\\\'", "'")
 input = decode_escaped_unicode(input)
 input = input[:input.find("\\\"}]")]
 
