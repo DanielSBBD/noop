@@ -224,6 +224,28 @@ def list_service_operations(service: str) -> Dict[str, Any]:
     except Exception as e:
         return {"error": str(e)}
 
+@tool
+def read_account_discovery_results() -> Dict[str, Any]:
+    """
+    Read information about the resources in the account.
+    
+    Returns:
+        Dict[str, Any]: Account discovery results
+    """
+    try:
+        s3_client = boto3.client('s3')
+        response = s3_client.get_object(
+            Bucket='noop-storage',
+            Key='discovery-results.md'
+        )
+        return {
+            'function': 'read_account_discovery_results',
+            'results': response['Body'].read().decode('utf-8')
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
 # Create a BedrockModel with the same configuration as in agent.tf
 bedrock_model = BedrockModel(
     model_id="us.anthropic.claude-sonnet-4-20250514-v1:0",
@@ -242,7 +264,7 @@ You are an AWS CloudWatch alarm monitoring expert. Your task is to design and cr
 - Ensure alarms are actionable — avoid noisy or low-value alarms.
 
 **Alarm Creation Steps**
-- Identify all resources and their types.
+- Identify all resources and their types. You can use the `read_account_discovery_results` tool to get a summary of the deployed resources.
 - Note their key attributes (region, instance class, scaling groups, engine type, etc.).
 - Select Critical Metrics per Resource Type
 - Define Alarm Thresholds & Conditions
@@ -278,6 +300,7 @@ agent = Agent(
         invoke_aws_api,
         list_available_services, 
         list_service_operations,
+        read_account_discovery_results,
         current_time,
         calculator
     ]
