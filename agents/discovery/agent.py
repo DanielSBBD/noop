@@ -228,9 +228,7 @@ def invoke(payload):
         s3_client = boto3.client('s3')
         
         # Parse the response to extract the content
-        raw_response = str(response.message)
-        
-        markdown_response = raw_response[raw_response.find('"')+1:raw_response.rfind('"')]
+        markdown_response = str(response.message)        
         
         s3_client.put_object(
             Bucket='noop-storage',
