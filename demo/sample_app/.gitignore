@@ -1,0 +1,29 @@
+# Terraform-generated files and directories
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraformrc
+terraform.rc
+
+# Sensitive variable files
+*.tfvars
+*.tfvars.json
+
+# Crash log files
+crash.log
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Provider-specific files (if not managed by .terraform/)
+# For example, if you have local provider binaries outside of .terraform/
+# provider-binary-name
+
+# Editor-specific files (e.g., VS Code, Sublime Text)
+.vscode/
+.sublime/
+*.swp
+*.bak
